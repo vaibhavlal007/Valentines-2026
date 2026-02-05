@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <title>Will You Be My Valentine?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Date Picker for Testing */
+        .date-selector {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            z-index: 1000;
+            font-size: 12px;
+        }
+
+        .date-selector label {
+            color: #FF69B4;
+            font-size: 11px;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .date-selector select {
+            padding: 4px 8px;
+            border: 2px solid #FFB3C6;
+            border-radius: 10px;
+            background: #FFF0F5;
+            color: #FF1493;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Floating Elements Animation */
+        .floating-element {
+            position: absolute;
+            font-size: 24px;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Keep emojis away from center */
+        .floating-element.avoid-center {
+            filter: blur(0px);
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translateY(-30px) rotate(15deg); 
+                opacity: 0.8;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Cute Illustration Area */
+        .illustration {
+            display: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #000000;
+            font-size: 32px;
+            margin-bottom: 50px;
+            text-shadow: none;
+            line-height: 1.4;
+            word-spacing: -2px;
+        }
+
+        h1 .char {
+            opacity: 0;
+            display: inline;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        h1 .word-space {
+            display: inline;
+        }
+
+        /* Buttons Container */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 50px;
+            position: relative;
+            min-height: 180px;
+        }
+
+        button {
+            padding: 18px 50px;
+            font-size: 22px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            width: 200px;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #FF69B4, #FF1493);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .yes-btn.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .yes-btn.burst {
+            animation: burst 0.3s ease-out;
+        }
+
+        @keyframes burst {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .yes-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .yes-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .yes-btn:active {
+            transform: scale(0.95);
+        }
+
+        .no-btn-container {
+            position: relative;
+            width: 200px;
+            height: 60px;
+        }
+
+        .no-arrow {
+            display: none;
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #FFB3C6, #FFC2D1);
+            color: #FF1493;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all 0.2s ease;
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+        }
+
+        /* Hearts explosion */
+        .heart-explosion {
+            position: fixed;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .heart-fall {
+            animation: fall-down 1.5s ease-in forwards !important;
+        }
+
+        @keyframes fall-down {
+            0% {
+                transform: translate(var(--tx), var(--ty)) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), calc(var(--ty) + 100vh)) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Thank You Page Styles */
+        .thank-you-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 10000;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px;
+            display: none;
+        }
+
+        .thank-you-page.show {
+            display: block;
+        }
+
+        .thank-you-header {
+            font-family: 'Pacifico', cursive;
+            color: #FF1493;
+            font-size: 36px;
+            text-align: center;
+            margin: 40px 0;
+            line-height: 1.3;
+        }
+
+        .thank-you-header .char {
+            opacity: 0;
+            display: inline;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .content-section {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px 15px 60px 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 30px auto;
+            max-width: 300px;
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .polaroid-caption {
+            text-align: center;
+            font-family: 'Pacifico', cursive;
+            color: #333;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .message-text {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            margin: 40px 0;
+            padding: 0 10px;
+        }
+
+        .photo-collage {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin: 50px 0;
+            padding: 0 10px;
+        }
+
+        .collage-polaroid {
+            background: white;
+            padding: 10px 10px 50px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: rotate(var(--rotation));
+        }
+
+        .collage-polaroid img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .next-button {
+            display: block;
+            margin: 50px auto;
+            padding: 18px 50px;
+            font-size: 22px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #FF69B4, #FF1493);
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .next-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Date Selector for Testing -->
+    <div class="date-selector">
+        <label>Test:</label>
+        <select id="dateSelect">
+            <option value="2025-02-07">Rose Day</option>
+            <option value="2025-02-08">Propose Day</option>
+            <option value="2025-02-09">Chocolate Day</option>
+            <option value="2025-02-10">Teddy Day</option>
+            <option value="2025-02-11">Promise Day</option>
+            <option value="2025-02-12">Hug Day</option>
+            <option value="2025-02-13">Kiss Day</option>
+            <option value="2025-02-14">Valentine's Day</option>
+        </select>
+    </div>
+
+    <!-- Floating Elements -->
+    <div id="floatingContainer"></div>
+
+    <!-- Thank You Page -->
+    <div class="thank-you-page" id="thankYouPage">
+        <h1 class="thank-you-header">Thanks for accepting<br>my invitation ma'am 💕</h1>
+        
+        <div class="content-section">
+            <!-- First Image -->
+            <div class="polaroid">
+                <div style="width: 100%; height: 300px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">Photo 1</div>
+                <div class="polaroid-caption">Us ❤️</div>
+            </div>
+
+            <!-- Message -->
+            <div class="message-text">
+                Mr. Mehakuu,
+                <br><br>
+                Thank you so much for accepting my message to be my Valentine. You have made each and every cell of my body happy and excited.
+                <br><br>
+                Apke saath firse ye ek aur Valentine's Day manane mein hamein bohot maza ane wala hai. Mere mehakuu ke bare mein apko kya batau. Woh kitna pyara bacha hai. Ekdm next level. Pure Multiverse mein sabse cutie 😚😚😚. Uski jitni tareef karo utni kam hai. Kyuki woh toh already good boy hai. Uske Mumma aur Papa ko mai apne haatho se award dunga ek din.
+                <br><br>
+                <div style="margin: 20px 0;">
+                    <img src="https://picsum.photos/400/300" style="width: 100%; max-width: 400px; border-radius: 10px; display: block; margin: 0 auto;" alt="Photo 1">
+                </div>
+                <br>
+                Uski kuch specialities hain. Sabse zyada ki woh 24/7 365 mujhe kutne ke liye tayar rehta hai. Haan ehsaas toh mujhe bhi nahi hota kyu par rehta toh hai. Uska sabse fav dialogue ye hai:
+                <br><br>
+                <div style="height: 100px; background: #f9f9f9; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; color: #999; margin: 20px 0; border-radius: 10px;">Photo Space 2</div>
+                <br>
+                Lekin ab iski gaalio ki itni aadat hai mujhe, ki jab ghar jata hai aur gaali nahi deta hai, toh aisa lagta hai ki mano mai behra ho gya. Meri zindagi ka woh rass gayab ho gya, jaise McD without Coke. Gym without protein 🍼. Aap samajh gye honge mere armaan 😏😏.
+                <br><br>
+                Kehta hai ki mai khane aur sone ko badi zyada importance deta hu. Haan deta toh hu lekin iski wajah se. Isne itna ache se pamper kia hai ki thode drame toh kar sakta hu na. HEHEHEHEHEHHEHEH.
+                <br><br>
+                Bas lekin akhri baat yahi hai ki jaisa bhi hai, gusse wale, daantne wala, gurrane wala, mera Mehakkuuu hai. Baaki kuch bhi ho, pyaar bohot karta hai hamse. Possesive nahi hai, territorial hai. Koi aankh bhi dikhaye toh mukka mardega 🦁🦁.
+                <br><br>
+                <div style="height: 100px; background: #f9f9f9; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; color: #999; margin: 20px 0; border-radius: 10px;">Photo Space 3</div>
+                <br>
+                Bas isiliye hum bhi isko dher sara pyar karte hain.<br>
+                Ispe ikraar beshumar karte hain<br>
+                Isko khana khilate hain<br>
+                Isko motu golu banate hain<br>
+                Hum rahenge sada iski chatra chaya mein<br>
+                Chele banke rahenge is guru ki kaya/maya mein<br>
+                Pyaar isse karte hai hum dher sara<br>
+                Holi pe pichkari nikli sara ra ra
+                <br><br>
+                Wah waah waah waah
+                <br><br>
+                Shayri banane mein mai expert hu pata hai mujhe 😀
+                <br><br>
+                Chalo ab bohot batein ho gyi. Neeche kuch pyari yaadein chodke ja rhe hain hamari. Maza ayega is hafte mein. Karenge apko pamper. Kabhi laga ki zarurat hai, toh de dena hamko LEGO ya protein 🍼 ka gift hamper.
+                <br><br>
+                I love you &lt;3
+            </div>
+
+            <!-- Photo Collage -->
+            <div class="photo-collage" id="photoCollage"></div>
+
+            <!-- Next Button -->
+            <button class="next-button" onclick="goToNextPage()">Continue 💖</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="illustration">💕✨</div>
+        <h1>Will You Be<br>My Valentine?</h1>
+        
+        <div class="buttons">
+            <button class="yes-btn" onclick="handleYes()">Yes! 💖</button>
+            
+            <div class="no-btn-container">
+                <div class="no-arrow">Don't click here</div>
+                <button class="no-btn" id="noBtn">No 💔</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Date configuration for Valentine's Week
+        const valentineWeek = {
+            '2025-02-07': { name: 'Rose Day', emoji: '🌹' },
+            '2025-02-08': { name: 'Propose Day', emoji: '💍' },
+            '2025-02-09': { name: 'Chocolate Day', emoji: '🍫' },
+            '2025-02-10': { name: 'Teddy Day', emoji: '🧸' },
+            '2025-02-11': { name: 'Promise Day', emoji: '🤝' },
+            '2025-02-12': { name: 'Hug Day', emoji: '🤗' },
+            '2025-02-13': { name: 'Kiss Day', emoji: '💋' },
+            '2025-02-14': { name: "Valentine's Day", emoji: '❤️' }
+        };
+
+        let currentDate = new Date().toISOString().split('T')[0];
+
+        // Create floating elements based on the day
+        function createFloatingElements() {
+            const container = document.getElementById('floatingContainer');
+            container.innerHTML = '';
+            
+            const dayData = valentineWeek[currentDate] || { emoji: '💕' };
+            const emoji = dayData.emoji;
+            
+            // Increase to 100 floating elements, keep away from center
+            for (let i = 0; i < 100; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = emoji;
+                
+                // Generate position avoiding center area (30-70% of screen)
+                let left, top;
+                do {
+                    left = Math.random() * 100;
+                    top = Math.random() * 100;
+                } while (
+                    left > 25 && left < 75 && top > 30 && top < 70
+                );
+                
+                element.style.left = left + '%';
+                element.style.top = top + '%';
+                element.style.animationDelay = Math.random() * 4 + 's';
+                element.style.animationDuration = (6 + Math.random() * 6) + 's';
+                container.appendChild(element);
+            }
+        }
+
+        // Handle date selection
+        document.getElementById('dateSelect').addEventListener('change', (e) => {
+            currentDate = e.target.value;
+            createFloatingElements();
+        });
+
+        // Initialize floating elements
+        createFloatingElements();
+
+        // Animate text word by word to preserve spacing
+        const h1 = document.querySelector('#mainHeading');
+        const lines = ['Will You Be', 'My Valentine?'];
+        
+        function animateText() {
+            h1.innerHTML = '';
+            let charIndex = 0;
+            
+            lines.forEach((line, lineIndex) => {
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    word.split('').forEach((char) => {
+                        const span = document.createElement('span');
+                        span.className = 'char';
+                        span.textContent = char;
+                        span.style.animationDelay = (charIndex * 0.08) + 's';
+                        h1.appendChild(span);
+                        charIndex++;
+                    });
+                    
+                    if (wordIndex < words.length - 1) {
+                        const space = document.createElement('span');
+                        space.className = 'char word-space';
+                        space.textContent = ' ';
+                        space.style.animationDelay = (charIndex * 0.08) + 's';
+                        h1.appendChild(space);
+                        charIndex++;
+                    }
+                });
+                
+                if (lineIndex < lines.length - 1) {
+                    h1.appendChild(document.createElement('br'));
+                }
+            });
+        }
+        
+        animateText();
+        setInterval(animateText, 10000);
+
+        // Handle Yes button with heart explosion
+        function handleYes() {
+            const yesBtn = document.querySelector('.yes-btn');
+            const btnRect = yesBtn.getBoundingClientRect();
+            const centerX = btnRect.left + btnRect.width / 2;
+            const centerY = btnRect.top + btnRect.height / 2;
+            
+            // Step 1: Shake the button
+            yesBtn.classList.add('shake');
+            
+            setTimeout(() => {
+                yesBtn.classList.remove('shake');
+                
+                // Step 2: Burst effect
+                yesBtn.classList.add('burst');
+                
+                setTimeout(() => {
+                    // Create overlay
+                    const overlay = document.createElement('div');
+                    overlay.className = 'animation-overlay';
+                    document.body.appendChild(overlay);
+                    
+                    // Step 3: Create heart explosion (back to full effect)
+                    const heartCount = 300;
+                    const hearts = [];
+                    
+                    for (let i = 0; i < heartCount; i++) {
+                        const heart = document.createElement('div');
+                        heart.className = 'heart-explosion';
+                        heart.textContent = '❤️';
+                        heart.style.left = centerX + 'px';
+                        heart.style.top = centerY + 'px';
+                        
+                        // Random direction for explosion to cover whole screen
+                        const angle = (Math.PI * 2 * i) / heartCount + (Math.random() - 0.5) * 0.5;
+                        const distance = 200 + Math.random() * 400;
+                        const tx = Math.cos(angle) * distance;
+                        const ty = Math.sin(angle) * distance;
+                        
+                        heart.style.setProperty('--tx', tx + 'px');
+                        heart.style.setProperty('--ty', ty + 'px');
+                        
+                        document.body.appendChild(heart);
+                        hearts.push(heart);
+                    }
+                    
+                    // Step 4: After 1 second, make hearts fall
+                    setTimeout(() => {
+                        hearts.forEach(heart => {
+                            heart.classList.add('heart-fall');
+                        });
+                        
+                        // Step 5: Navigate to thank you page quickly
+                        setTimeout(() => {
+                            // Clean up
+                            hearts.forEach(heart => heart.remove());
+                            overlay.remove();
+                            
+                            // Navigate to thank you page
+                            createThankYouPage();
+                        }, 800);
+                    }, 1000);
+                }, 300);
+            }, 500);
+        }
+
+        // Create thank you page with lazy loading
+        function createThankYouPage() {
+            const thankYouPage = document.getElementById('thankYouPage');
+            const mainContainer = document.querySelector('.container');
+            const floatingContainer = document.getElementById('floatingContainer');
+            const dateSelector = document.querySelector('.date-selector');
+            
+            // Hide main page elements
+            mainContainer.style.display = 'none';
+            floatingContainer.style.display = 'none';
+            dateSelector.style.display = 'none';
+            
+            // Show thank you page
+            thankYouPage.classList.add('show');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Animate the thank you header
+            animateThankYouHeader();
+            
+            // Lazy load the photo collage after a short delay
+            setTimeout(() => {
+                createPhotoCollage();
+            }, 500);
+        }
+
+        // Animate thank you header letter by letter
+        function animateThankYouHeader() {
+            const header = document.querySelector('.thank-you-header');
+            const lines = ['Thanks for accepting', 'my invitation ma\'am 💕'];
+            header.innerHTML = '';
+            let charIndex = 0;
+            
+            lines.forEach((line, lineIndex) => {
+                const words = line.split(' ');
+                words.forEach((word, wordIndex) => {
+                    word.split('').forEach((char) => {
+                        const span = document.createElement('span');
+                        span.className = 'char';
+                        span.textContent = char;
+                        span.style.animationDelay = (charIndex * 0.08) + 's';
+                        header.appendChild(span);
+                        charIndex++;
+                    });
+                    
+                    if (wordIndex < words.length - 1) {
+                        const space = document.createElement('span');
+                        space.className = 'char';
+                        space.textContent = ' ';
+                        space.style.animationDelay = (charIndex * 0.08) + 's';
+                        header.appendChild(space);
+                        charIndex++;
+                    }
+                });
+                
+                if (lineIndex < lines.length - 1) {
+                    header.appendChild(document.createElement('br'));
+                }
+            });
+        }
+
+        // Create photo collage with polaroids (loads gradually)
+        function createPhotoCollage() {
+            const collage = document.getElementById('photoCollage');
+            const rotations = ['-3deg', '2deg', '-1deg', '3deg', '-2deg', '1deg', '-4deg', '2deg', '-1deg', '3deg', '-2deg', '1deg', '-3deg', '2deg', '-1deg'];
+            
+            // Add photos one by one with slight delay for smooth loading
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const polaroid = document.createElement('div');
+                    polaroid.className = 'collage-polaroid';
+                    polaroid.style.setProperty('--rotation', rotations[i]);
+                    polaroid.innerHTML = `<div style="width: 100%; height: 250px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">Photo ${i + 1}</div>`;
+                    polaroid.style.opacity = '0';
+                    polaroid.style.transition = 'opacity 0.3s';
+                    collage.appendChild(polaroid);
+                    
+                    // Fade in
+                    setTimeout(() => {
+                        polaroid.style.opacity = '1';
+                    }, 50);
+                }, i * 100); // Stagger by 100ms each
+            }
+        }
+
+        // Next page function
+        function goToNextPage() {
+            alert('Next page coming soon! 💕');
+            // TODO: Navigate to next page
+        }
+
+        // Handle No button - make it run away on mobile (touch)
+        const noBtn = document.getElementById('noBtn');
+        const noBtnContainer = document.querySelector('.no-btn-container');
+        let moveCount = 0;
+
+        function moveNoButton() {
+            moveCount++;
+            
+            const containerWidth = window.innerWidth - 220;
+            const containerHeight = 150;
+            
+            let newX = (Math.random() - 0.5) * containerWidth;
+            let newY = (Math.random() - 0.5) * containerHeight;
+            
+            // Make it move faster and more erratically after a few attempts
+            if (moveCount > 5) {
+                newX *= 1.5;
+                newY *= 1.5;
+            }
+            
+            if (moveCount > 10) {
+                newX *= 2;
+                newY *= 2;
+                noBtn.style.transform = `translate(${newX}px, ${newY}px) scale(0.8)`;
+            } else {
+                noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+            }
+        }
+
+        // Handle both mouse and touch events
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // Add sparkles around Yes button
+        const yesBtn = document.querySelector('.yes-btn');
+        setInterval(() => {
+            const rect = yesBtn.getBoundingClientRect();
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1500);
+        }, 400);
+    </script>
+</body>
+</html>
