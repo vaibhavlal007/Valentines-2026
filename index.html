@@ -70,11 +70,6 @@
             pointer-events: none;
         }
 
-        /* Keep emojis away from center */
-        .floating-element.avoid-center {
-            filter: blur(0px);
-        }
-
         @keyframes float {
             0%, 100% { 
                 transform: translateY(0px) rotate(0deg); 
@@ -357,31 +352,9 @@
             padding: 0 10px;
         }
 
-        .photo-collage {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin: 50px 0;
-            padding: 0 10px;
-        }
-
-        .collage-polaroid {
-            background: white;
-            padding: 10px 10px 50px 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-            transform: rotate(var(--rotation));
-        }
-
-        .collage-polaroid img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
         .next-button {
             display: block;
-            margin: 50px auto;
+            margin: 50px auto 100px auto;
             padding: 18px 50px;
             font-size: 22px;
             border: none;
@@ -425,10 +398,11 @@
         
         <div class="content-section">
             <!-- First Image -->
-<div class="polaroid">
-    <img src="https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/photo-polaroid.jpg" style="width: 100%; height: 300px; object-fit: cover; display: block;" alt="Us">
-    <div class="polaroid-caption">❤️❤️❤️</div>
-</div>
+            <div class="polaroid">
+                <img src="https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/photo-polaroid.jpg" style="width: 100%; height: 300px; object-fit: cover; display: block;" alt="Us">
+                <div class="polaroid-caption">❤️❤️❤️</div>
+            </div>
+
             <!-- Message -->
             <div class="message-text">
                 Mr. Mehakuu,
@@ -453,9 +427,10 @@
                 <br><br>
                 Bas lekin akhri baat yahi hai ki jaisa bhi hai, gusse wale, daantne wala, gurrane wala, mera Mehakkuuu hai. Baaki kuch bhi ho, pyaar bohot karta hai hamse. Possessive nahi hai, territorial hai. Koi aankh bhi dikhaye toh mukka mardega 🦁🦁. Perfect representation below agar koi girl/ladies/mahila/ladki/kanya/balika/kumari aspass aa jaye toh. 
                 <br><br>
-<div style="margin: 30px 0; padding: 20px 0;">
-    <img src="https://media1.tenor.com/m/Q1wQhaxalVUAAAAd/lion-hungry.gif" style="width: 100%; max-width: 400px; border-radius: 10px; display: block; margin: 0 auto;" alt="Lion GIF">
-</div>           <br>
+                <div style="margin: 30px 0; padding: 20px 0;">
+                    <img src="https://media1.tenor.com/m/Q1wQhaxalVUAAAAd/lion-hungry.gif" style="width: 100%; max-width: 400px; border-radius: 10px; display: block; margin: 0 auto;" alt="Lion GIF">
+                </div>
+                <br>
                 Bas isiliye hum bhi isko dher sara pyar karte hain.<br>
                 Ispe ikraar beshumar karte hain<br>
                 Isko khana khilate hain<br>
@@ -469,13 +444,10 @@
                 <br><br>
                 Shayri banane mein mai expert hu pata hai mujhe 😀
                 <br><br>
-                Chalo ab bohot batein ho gyi. Neeche kuch pyari yaadein chodke ja rhe hain hamari. Maza ayega is hafte mein. Karenge apko pamper. Kabhi laga ki zarurat hai, toh de dena hamko LEGO ya protein 🍼 ka gift hamper.
+                Chalo ab bohot batein ho gyi. Maza ayega is hafte mein. Karenge apko pamper. Kabhi laga ki zarurat hai, toh de dena hamko LEGO ya protein 🍼 ka gift hamper.
                 <br><br>
                 I love you &lt;3
             </div>
-
-            <!-- Photo Collage -->
-            <div class="photo-collage" id="photoCollage"></div>
 
             <!-- Next Button -->
             <button class="next-button" onclick="goToNextPage()">Continue 💖</button>
@@ -485,7 +457,7 @@
     <!-- Main Container -->
     <div class="container">
         <div class="illustration">💕✨</div>
-        <h1>Will You Be<br>My Valentine?</h1>
+        <h1 id="mainHeading">Will You Be<br>My Valentine?</h1>
         
         <div class="buttons">
             <button class="yes-btn" onclick="handleYes()">Yes! 💖</button>
@@ -520,8 +492,8 @@
             const dayData = valentineWeek[currentDate] || { emoji: '💕' };
             const emoji = dayData.emoji;
             
-            // Increase to 100 floating elements, keep away from center
-            for (let i = 0; i < 100; i++) {
+            // 150 floating elements (50% more), keep away from center
+            for (let i = 0; i < 150; i++) {
                 const element = document.createElement('div');
                 element.className = 'floating-element';
                 element.textContent = emoji;
@@ -608,12 +580,7 @@
                 yesBtn.classList.add('burst');
                 
                 setTimeout(() => {
-                    // Create overlay
-                    const overlay = document.createElement('div');
-                    overlay.className = 'animation-overlay';
-                    document.body.appendChild(overlay);
-                    
-                    // Step 3: Create heart explosion (back to full effect)
+                    // Step 3: Create heart explosion
                     const heartCount = 300;
                     const hearts = [];
                     
@@ -643,11 +610,10 @@
                             heart.classList.add('heart-fall');
                         });
                         
-                        // Step 5: Navigate to thank you page quickly
+                        // Step 5: Navigate to thank you page
                         setTimeout(() => {
                             // Clean up
                             hearts.forEach(heart => heart.remove());
-                            overlay.remove();
                             
                             // Navigate to thank you page
                             createThankYouPage();
@@ -657,7 +623,7 @@
             }, 500);
         }
 
-        // Create thank you page with lazy loading
+        // Create thank you page
         function createThankYouPage() {
             const thankYouPage = document.getElementById('thankYouPage');
             const mainContainer = document.querySelector('.container');
@@ -677,11 +643,6 @@
             
             // Animate the thank you header
             animateThankYouHeader();
-            
-            // Lazy load the photo collage after a short delay
-            setTimeout(() => {
-                createPhotoCollage();
-            }, 500);
         }
 
         // Animate thank you header letter by letter
@@ -719,39 +680,14 @@
             });
         }
 
-        // Create photo collage with polaroids (loads gradually)
-        function createPhotoCollage() {
-            const collage = document.getElementById('photoCollage');
-            const rotations = ['-3deg', '2deg', '-1deg', '3deg', '-2deg', '1deg', '-4deg', '2deg', '-1deg', '3deg', '-2deg', '1deg', '-3deg', '2deg', '-1deg'];
-            
-            // Add photos one by one with slight delay for smooth loading
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const polaroid = document.createElement('div');
-                    polaroid.className = 'collage-polaroid';
-                    polaroid.style.setProperty('--rotation', rotations[i]);
-                    polaroid.innerHTML = `<div style="width: 100%; height: 250px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">Photo ${i + 1}</div>`;
-                    polaroid.style.opacity = '0';
-                    polaroid.style.transition = 'opacity 0.3s';
-                    collage.appendChild(polaroid);
-                    
-                    // Fade in
-                    setTimeout(() => {
-                        polaroid.style.opacity = '1';
-                    }, 50);
-                }, i * 100); // Stagger by 100ms each
-            }
-        }
-
         // Next page function
         function goToNextPage() {
             alert('Next page coming soon! 💕');
-            // TODO: Navigate to next page
+            // TODO: Navigate to dynamic Valentine's Week page
         }
 
         // Handle No button - make it run away on mobile (touch)
         const noBtn = document.getElementById('noBtn');
-        const noBtnContainer = document.querySelector('.no-btn-container');
         let moveCount = 0;
 
         function moveNoButton() {
