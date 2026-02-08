@@ -429,50 +429,11 @@
             line-height: 1.8;
             color: #333;
             text-align: center;
-            margin: 40px auto;
+            margin: 40px auto 100px auto;
             padding: 20px;
             max-width: 400px;
-            background: rgba(255, 243, 245, 0.5);
+            background: rgba(255, 243, 245, 0.8);
             border-radius: 20px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 50px 0 100px 0;
-        }
-
-        .nav-btn {
-            padding: 15px 35px;
-            font-size: 18px;
-            border: none;
-            border-radius: 50px;
-            background: linear-gradient(135deg, #FF69B4, #FF1493);
-            color: white;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .nav-btn:active {
-            transform: scale(0.95);
-        }
-
-        .nav-btn:disabled {
-            background: linear-gradient(135deg, #ccc, #999);
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .locked-message {
-            text-align: center;
-            color: #FF69B4;
-            font-size: 14px;
-            margin-top: 10px;
-            font-family: 'Quicksand', sans-serif;
         }
     </style>
 </head>
@@ -497,22 +458,32 @@
 
     <!-- Valentine's Week Page -->
     <div class="valentine-week-page" id="valentineWeekPage">
-        <!-- Floating emojis for this page -->
-        <div id="weekFloatingContainer" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10002; pointer-events: none;"></div>
+        <!-- Day Selector -->
+        <div class="date-selector" style="position: relative; top: 0; left: 0; transform: none; margin: 0 auto 20px auto;">
+            <label>Select Day:</label>
+            <select id="weekDaySelect">
+                <option value="2026-02-07">Rose Day</option>
+                <option value="2026-02-08">Propose Day</option>
+                <option value="2026-02-09">Chocolate Day</option>
+                <option value="2026-02-10">Teddy Day</option>
+                <option value="2026-02-11">Promise Day</option>
+                <option value="2026-02-12">Hug Day</option>
+                <option value="2026-02-13">Kiss Day</option>
+                <option value="2026-02-14">Valentine's Day</option>
+            </select>
+        </div>
         
-        <div style="position: relative; z-index: 10003;">
+        <div style="position: relative; z-index: 10;">
             <h1 class="day-header" id="dayHeader">Happy Rose Day</h1>
             <p class="day-date" id="dayDate">February 7, 2026</p>
             
-            <div class="day-photo">
-                <img id="dayPhoto" src="https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Dayphoto-1" alt="Day Photo">
+            <div class="day-photo" id="dayPhotoContainer">
+                <img id="dayPhoto" src="" alt="Day Photo">
             </div>
 
-            <div class="nav-buttons">
-                <button class="nav-btn" id="prevDayBtn" onclick="navigateDay(-1)" disabled>← Previous</button>
-                <button class="nav-btn" id="nextDayBtn" onclick="navigateDay(1)" disabled>Next →</button>
+            <div class="day-message" id="dayMessage">
+                Your message will appear here...
             </div>
-            <p class="locked-message" id="lockedMessage"></p>
         </div>
     </div>
 
@@ -521,13 +492,11 @@
         <h1 class="thank-you-header">Thanks for accepting<br>my invitation ma'am 💕</h1>
         
         <div class="content-section">
-            <!-- First Image -->
             <div class="polaroid">
                 <img src="https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/photo-polaroid.jpg" style="width: 100%; height: 300px; object-fit: cover; display: block;" alt="Us">
                 <div class="polaroid-caption">❤️❤️❤️</div>
             </div>
 
-            <!-- Message -->
             <div class="message-text">
                 Mr. Mehakuu,
                 <br><br>
@@ -573,7 +542,6 @@
                 I love you &lt;3
             </div>
 
-            <!-- Next Button -->
             <button class="next-button" onclick="goToNextPage()">Continue 💖</button>
         </div>
     </div>
@@ -594,62 +562,73 @@
     </div>
 
     <script>
-        // ============================================
-        // CONFIGURATION - ADD YOUR PHOTOS AND MESSAGES HERE
-        // ============================================
         const valentineWeekContent = {
             '2026-02-07': {
                 name: 'Happy Rose Day',
                 emoji: '🌹',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/WhatsApp%20Image%202026-02-07%20at%203.32.34%20AM.jpeg',
-                message: 'Your sweet Rose Day message here...'
+                message: 'Your sweet Rose Day message here...',
+                date: 'February 7, 2026',
+                unlocked: true
             },
             '2026-02-08': {
                 name: 'Happy Propose Day',
                 emoji: '💍',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Proposeday',
-                message: 'Your sweet Propose Day message here...'
+                message: 'Your sweet Propose Day message here...',
+                date: 'February 8, 2026',
+                unlocked: false
             },
             '2026-02-09': {
                 name: 'Happy Chocolate Day',
                 emoji: '🍫',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Chocolateday',
-                message: 'Your sweet Chocolate Day message here...'
+                message: 'Your sweet Chocolate Day message here...',
+                date: 'February 9, 2026',
+                unlocked: false
             },
             '2026-02-10': {
                 name: 'Happy Teddy Day',
                 emoji: '🧸',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Teddyday',
-                message: 'Your sweet Teddy Day message here...'
+                message: 'Your sweet Teddy Day message here...',
+                date: 'February 10, 2026',
+                unlocked: false
             },
             '2026-02-11': {
                 name: 'Happy Promise Day',
                 emoji: '🤝',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Promiseday',
-                message: 'Your sweet Promise Day message here...'
+                message: 'Your sweet Promise Day message here...',
+                date: 'February 11, 2026',
+                unlocked: false
             },
             '2026-02-12': {
                 name: 'Happy Hug Day',
                 emoji: '🤗',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Hugday',
-                message: 'Your sweet Hug Day message here...'
+                message: 'Your sweet Hug Day message here...',
+                date: 'February 12, 2026',
+                unlocked: false
             },
             '2026-02-13': {
                 name: 'Happy Kiss Day',
                 emoji: '💋',
                 photo: 'https://raw.githubusercontent.com/vaibhavlal007/Valentines-2026/main/Kissday',
-                message: 'Your sweet Kiss Day message here...'
+                message: 'Your sweet Kiss Day message here...',
+                date: 'February 13, 2026',
+                unlocked: false
             },
             '2026-02-14': {
                 name: "Happy Valentine's Day",
                 emoji: '❤️',
                 photo: 'PASTE_PHOTO_URL_HERE',
-                message: 'Your sweet Valentine\'s Day message here...'
+                message: 'Your sweet Valentine\'s Day message here...',
+                date: 'February 14, 2026',
+                unlocked: false
             }
         };
 
-        // ============================================
-        // Date configuration for Valentine's Week
         const valentineWeek = {
             '2026-02-07': { name: 'Happy Rose Day', emoji: '🌹' },
             '2026-02-08': { name: 'Happy Propose Day', emoji: '💍' },
@@ -662,9 +641,8 @@
         };
 
         let currentDate = new Date().toISOString().split('T')[0];
-        let currentViewDate = getCurrentISTDate();
+        let selectedDay = '2026-02-07';
 
-        // Create floating elements based on the day
         function createFloatingElements() {
             const container = document.getElementById('floatingContainer');
             container.innerHTML = '';
@@ -672,20 +650,16 @@
             const dayData = valentineWeek[currentDate] || { emoji: '💕' };
             const emoji = dayData.emoji;
             
-            // 150 floating elements (50% more), keep away from center
             for (let i = 0; i < 150; i++) {
                 const element = document.createElement('div');
                 element.className = 'floating-element';
                 element.textContent = emoji;
                 
-                // Generate position avoiding center area (30-70% of screen)
                 let left, top;
                 do {
                     left = Math.random() * 100;
                     top = Math.random() * 100;
-                } while (
-                    left > 25 && left < 75 && top > 30 && top < 70
-                );
+                } while (left > 25 && left < 75 && top > 30 && top < 70);
                 
                 element.style.left = left + '%';
                 element.style.top = top + '%';
@@ -695,16 +669,13 @@
             }
         }
 
-        // Handle date selection
         document.getElementById('dateSelect').addEventListener('change', (e) => {
             currentDate = e.target.value;
             createFloatingElements();
         });
 
-        // Initialize floating elements
         createFloatingElements();
 
-        // Animate text word by word to preserve spacing
         const h1 = document.querySelector('#mainHeading');
         const lines = ['Will You Be', 'My Valentine?'];
         
@@ -743,24 +714,19 @@
         animateText();
         setInterval(animateText, 10000);
 
-        // Handle Yes button with heart explosion
         function handleYes() {
             const yesBtn = document.querySelector('.yes-btn');
             const btnRect = yesBtn.getBoundingClientRect();
             const centerX = btnRect.left + btnRect.width / 2;
             const centerY = btnRect.top + btnRect.height / 2;
             
-            // Step 1: Shake the button
             yesBtn.classList.add('shake');
             
             setTimeout(() => {
                 yesBtn.classList.remove('shake');
-                
-                // Step 2: Burst effect
                 yesBtn.classList.add('burst');
                 
                 setTimeout(() => {
-                    // Step 3: Create heart explosion
                     const heartCount = 300;
                     const hearts = [];
                     
@@ -771,7 +737,6 @@
                         heart.style.left = centerX + 'px';
                         heart.style.top = centerY + 'px';
                         
-                        // Random direction for explosion to cover whole screen
                         const angle = (Math.PI * 2 * i) / heartCount + (Math.random() - 0.5) * 0.5;
                         const distance = 200 + Math.random() * 400;
                         const tx = Math.cos(angle) * distance;
@@ -784,18 +749,11 @@
                         hearts.push(heart);
                     }
                     
-                    // Step 4: After 1 second, make hearts fall
                     setTimeout(() => {
-                        hearts.forEach(heart => {
-                            heart.classList.add('heart-fall');
-                        });
+                        hearts.forEach(heart => heart.classList.add('heart-fall'));
                         
-                        // Step 5: Navigate to thank you page
                         setTimeout(() => {
-                            // Clean up
                             hearts.forEach(heart => heart.remove());
-                            
-                            // Navigate to thank you page
                             createThankYouPage();
                         }, 800);
                     }, 1000);
@@ -803,29 +761,22 @@
             }, 500);
         }
 
-        // Create thank you page
         function createThankYouPage() {
             const thankYouPage = document.getElementById('thankYouPage');
             const mainContainer = document.querySelector('.container');
             const floatingContainer = document.getElementById('floatingContainer');
             const dateSelector = document.querySelector('.date-selector');
             
-            // Hide main page elements
             mainContainer.style.display = 'none';
             floatingContainer.style.display = 'none';
             dateSelector.style.display = 'none';
             
-            // Show thank you page
             thankYouPage.classList.add('show');
-            
-            // Scroll to top
             window.scrollTo(0, 0);
             
-            // Animate the thank you header
             animateThankYouHeader();
         }
 
-        // Animate thank you header letter by letter
         function animateThankYouHeader() {
             const header = document.querySelector('.thank-you-header');
             const lines = ['Thanks for accepting', 'my invitation ma\'am 💕'];
@@ -860,309 +811,70 @@
             });
         }
 
-        // Get current date in IST
-        function getCurrentISTDate() {
-            const now = new Date();
-            const istOffset = 5.5 * 60 * 60 * 1000;
-            const istTime = new Date(now.getTime() + istOffset);
-            return istTime.toISOString().split('T')[0];
-        }
-
-        // Check if a date is unlocked
-        function isDateUnlocked(targetDate) {
-            const currentIST = getCurrentISTDate();
-            return targetDate <= currentIST;
-        }
-
-        // Show Valentine's Week page
-        function showValentineWeekPage() {
-            const weekPage = document.getElementById('valentineWeekPage');
-            const thankYouPage = document.getElementById('thankYouPage');
-            const mainFloatingContainer = document.getElementById('floatingContainer');
-            
-            // Completely hide thank you page
-            thankYouPage.style.display = 'none';
-            thankYouPage.classList.remove('show');
-            
-            // Hide main floating container
-            mainFloatingContainer.style.display = 'none';
-            
-            // Show week page
-            weekPage.classList.add('show');
-            weekPage.style.display = 'block';
-            
-            currentViewDate = getCurrentISTDate();
-            
-            if (currentViewDate < '2026-02-07') {
-                currentViewDate = '2026-02-07';
-            }
-            if (currentViewDate > '2026-02-14') {
-                currentViewDate = '2026-02-14';
-            }
-            
-            updateDayContent();
-            window.scrollTo(0, 0);
-        }
-
-        // Update day content
-        function updateDayContent() {
-            const dayData = valentineWeekContent[currentViewDate];
-            if (!dayData) return;
-            
-            document.getElementById('dayHeader').textContent = dayData.name;
-            
-            const dateObj = new Date(currentViewDate + 'T00:00:00');
-            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            document.getElementById('dayDate').textContent = dateStr;
-            
-            const photoElement = document.getElementById('dayPhoto');
-            if (dayData.photo && dayData.photo !== 'PASTE_PHOTO_URL_HERE') {
-                photoElement.src = dayData.photo;
-                photoElement.style.display = 'block';
-            } else {
-                photoElement.style.display = 'none';
-            }
-            
-            updateFloatingEmojis(dayData.emoji);
-            updateNavButtons();
-        }
-
-        // Update floating emojis
-        function updateFloatingEmojis(emoji) {
-            const container = document.getElementById('floatingContainer');
-            container.innerHTML = '';
-            container.style.display = 'block';
-            
-            for (let i = 0; i < 150; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.textContent = emoji;
-                
-                let left, top;
-                do {
-                    left = Math.random() * 100;
-                    top = Math.random() * 100;
-                } while (left > 25 && left < 75 && top > 30 && top < 70);
-                
-                element.style.left = left + '%';
-                element.style.top = top + '%';
-                element.style.animationDelay = Math.random() * 4 + 's';
-                element.style.animationDuration = (6 + Math.random() * 6) + 's';
-                container.appendChild(element);
-            }
-        }
-
-        // Navigate day
-        function navigateDay(direction) {
-            const dates = Object.keys(valentineWeekContent).sort();
-            const currentIndex = dates.indexOf(currentViewDate);
-            const newIndex = currentIndex + direction;
-            
-            if (newIndex < 0 || newIndex >= dates.length) {
-                return; // Out of bounds
-            }
-            
-            const newDate = dates[newIndex];
-            
-            // Check if trying to go to future date
-            if (direction > 0 && !isDateUnlocked(newDate)) {
-                return; // Don't navigate to locked dates
-            }
-            
-            currentViewDate = newDate;
-            updateDayContent();
-            window.scrollTo(0, 0);
-        }
-
-        // Update nav buttons
-        function updateNavButtons() {
-            const dates = Object.keys(valentineWeekContent).sort();
-            const currentIndex = dates.indexOf(currentViewDate);
-            
-            const prevBtn = document.getElementById('prevDayBtn');
-            const nextBtn = document.getElementById('nextDayBtn');
-            const lockedMsg = document.getElementById('lockedMessage');
-            
-            prevBtn.disabled = currentIndex === 0;
-            
-            const nextDate = dates[currentIndex + 1];
-            const isNextUnlocked = nextDate && isDateUnlocked(nextDate);
-            nextBtn.disabled = currentIndex === dates.length - 1 || !isNextUnlocked;
-            
-            if (!isNextUnlocked && nextDate) {
-                lockedMsg.textContent = '🔒 Next day unlocks at midnight IST!';
-            } else {
-                lockedMsg.textContent = '';
-            }
-        }
-
-        // Next page function - Navigate to Valentine's Week page
         function goToNextPage() {
             showValentineWeekPage();
         }
 
-        // Get current date in IST
-        function getCurrentISTDate() {
-            const now = new Date();
-            // Convert to IST (UTC+5:30)
-            const istOffset = 5.5 * 60 * 60 * 1000;
-            const istTime = new Date(now.getTime() + istOffset);
-            return istTime.toISOString().split('T')[0];
-        }
-
-        // Check if a date is unlocked (has passed in IST)
-        function isDateUnlocked(targetDate) {
-            const currentIST = getCurrentISTDate();
-            return targetDate <= currentIST;
-        }
-
-        // Show Valentine's Week page
         function showValentineWeekPage() {
             const weekPage = document.getElementById('valentineWeekPage');
             const thankYouPage = document.getElementById('thankYouPage');
+            const testSelector = document.querySelector('.date-selector');
             
-            // Hide thank you page
             thankYouPage.style.display = 'none';
+            testSelector.style.display = 'none';
             
-            // Show week page
             weekPage.classList.add('show');
+            weekPage.style.display = 'block';
             
-            // Set to current IST date
-            currentViewDate = getCurrentISTDate();
+            const weekDaySelect = document.getElementById('weekDaySelect');
+            weekDaySelect.value = selectedDay;
+            weekDaySelect.addEventListener('change', function() {
+                selectedDay = this.value;
+                loadDayContent();
+            });
             
-            // If current date is before Feb 7, show Feb 7
-            if (currentViewDate < '2025-02-07') {
-                currentViewDate = '2025-02-07';
-            }
-            
-            // If current date is after Feb 14, show Feb 14
-            if (currentViewDate > '2025-02-14') {
-                currentViewDate = '2025-02-14';
-            }
-            
-            updateDayContent();
+            loadDayContent();
             window.scrollTo(0, 0);
         }
 
-        // Update day content
-        function updateDayContent() {
-            const dayData = valentineWeekContent[currentViewDate];
-            
+        function loadDayContent() {
+            const dayData = valentineWeekContent[selectedDay];
             if (!dayData) return;
             
-            // Update header
             document.getElementById('dayHeader').textContent = dayData.name;
+            document.getElementById('dayDate').textContent = dayData.date;
             
-            // Update date
-            const dateObj = new Date(currentViewDate + 'T00:00:00');
-            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            document.getElementById('dayDate').textContent = dateStr;
-            
-            // Update photo
+            const photoContainer = document.getElementById('dayPhotoContainer');
             const photoElement = document.getElementById('dayPhoto');
-            if (dayData.photo && dayData.photo !== 'PASTE_PHOTO_URL_HERE') {
-                photoElement.src = dayData.photo;
-                photoElement.style.display = 'block';
-            } else {
-                photoElement.style.display = 'none';
-            }
+            const messageElement = document.getElementById('dayMessage');
             
-            // Update message
-            document.getElementById('dayMessage').textContent = dayData.message;
+            messageElement.style.display = 'block';
             
-            // Update floating emojis
-            updateFloatingEmojis(dayData.emoji);
-            
-            // Update navigation buttons
-            updateNavButtons();
-        }
-
-        // Update floating emojis for Valentine's Week page
-        function updateFloatingEmojis(emoji) {
-            const container = document.getElementById('floatingContainer');
-            container.innerHTML = '';
-            container.style.display = 'block';
-            
-            for (let i = 0; i < 150; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.textContent = emoji;
-                
-                let left, top;
-                do {
-                    left = Math.random() * 100;
-                    top = Math.random() * 100;
-                } while (
-                    left > 25 && left < 75 && top > 30 && top < 70
-                );
-                
-                element.style.left = left + '%';
-                element.style.top = top + '%';
-                element.style.animationDelay = Math.random() * 4 + 's';
-                element.style.animationDuration = (6 + Math.random() * 6) + 's';
-                container.appendChild(element);
-            }
-        }
-
-        // Navigate to previous/next day
-        function navigateDay(direction) {
-            const dates = Object.keys(valentineWeekContent).sort();
-            const currentIndex = dates.indexOf(currentViewDate);
-            const newIndex = currentIndex + direction;
-            
-            if (newIndex >= 0 && newIndex < dates.length) {
-                const newDate = dates[newIndex];
-                
-                // Check if trying to go to future date
-                if (direction > 0 && !isDateUnlocked(newDate)) {
-                    return; // Don't navigate to locked future dates
+            if (dayData.unlocked) {
+                if (dayData.photo && dayData.photo !== 'PASTE_PHOTO_URL_HERE') {
+                    photoElement.src = dayData.photo;
+                    photoContainer.style.display = 'block';
+                } else {
+                    photoContainer.style.display = 'none';
                 }
-                
-                currentViewDate = newDate;
-                updateDayContent();
-                window.scrollTo(0, 0);
-            }
-        }
-
-        // Update navigation buttons state
-        function updateNavButtons() {
-            const dates = Object.keys(valentineWeekContent).sort();
-            const currentIndex = dates.indexOf(currentViewDate);
-            
-            const prevBtn = document.getElementById('prevDayBtn');
-            const nextBtn = document.getElementById('nextDayBtn');
-            const lockedMsg = document.getElementById('lockedMessage');
-            
-            // Previous button
-            prevBtn.disabled = currentIndex === 0;
-            
-            // Next button
-            const nextDate = dates[currentIndex + 1];
-            const isNextUnlocked = nextDate && isDateUnlocked(nextDate);
-            nextBtn.disabled = currentIndex === dates.length - 1 || !isNextUnlocked;
-            
-            // Locked message
-            if (!isNextUnlocked && nextDate) {
-                lockedMsg.textContent = '🔒 Next day unlocks at midnight IST!';
+                messageElement.textContent = dayData.message;
             } else {
-                lockedMsg.textContent = '';
+                photoContainer.style.display = 'none';
+                messageElement.textContent = 'Hi Ma\'am, Please let the day come and you shall see the message here. 🔒';
             }
         }
 
-        // Handle No button - make it run away on mobile (touch)
         const noBtn = document.getElementById('noBtn');
         let moveCount = 0;
 
         function moveNoButton() {
             moveCount++;
-            
             const containerWidth = window.innerWidth - 220;
             const containerHeight = 150;
             
             let newX = (Math.random() - 0.5) * containerWidth;
             let newY = (Math.random() - 0.5) * containerHeight;
             
-            // Make it move faster and more erratically after a few attempts
             if (moveCount > 5) {
                 newX *= 1.5;
                 newY *= 1.5;
@@ -1177,14 +889,12 @@
             }
         }
 
-        // Handle both mouse and touch events
         noBtn.addEventListener('mouseenter', moveNoButton);
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             moveNoButton();
         });
 
-        // Add sparkles around Yes button
         const yesBtn = document.querySelector('.yes-btn');
         setInterval(() => {
             const rect = yesBtn.getBoundingClientRect();
